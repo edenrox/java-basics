@@ -1,4 +1,10 @@
+# Compiled Files #
+
 *.class
+
+# Eclipse Files #
+.project
+.classpath
 
 # Package Files #
 *.jar
