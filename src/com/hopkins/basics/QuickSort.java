@@ -1,5 +1,6 @@
 package com.hopkins.basics;
 
+/** Randomized Quick Sort */ 
 public class QuickSort {
 
 	

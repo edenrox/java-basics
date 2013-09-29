@@ -1,5 +1,8 @@
 package com.hopkins.basics;
 
+import java.util.NoSuchElementException;
+
+/** A Single linked list **/
 public class SingleLinkedList<T> {
 	public int INDEX_ITEM_NOT_FOUND = -1;
 
@@ -11,7 +14,13 @@ public class SingleLinkedList<T> {
 		mCount = 0;
 	}
 	
-	
+	public void removeFirst() {
+		if (isEmpty()) {
+			throw new NoSuchElementException("Canot remove, the list is empty");
+		}
+		mHead = mHead.getNext();
+		mCount--;
+	}
 	
 	public void insertFirst(T item) {
 		Node<T> oldHead = mHead;

@@ -1,10 +1,11 @@
 package com.hopkins.basics;
 
+/** Similar to an ArrayList **/
 public class DynamicArray<T> {
 	
-	public int DEFAULT_CAPACITY = 8;
-	public int RESIZE_FACTOR = 2;
-	public int INDEX_ITEM_NOT_FOUND = -1;
+	public static final int DEFAULT_CAPACITY = 8;
+	public static final int RESIZE_FACTOR = 2;
+	public static final int INDEX_ITEM_NOT_FOUND = -1;
 	
 	public Object[] mData;
 	public int mCount;
@@ -49,6 +50,19 @@ public class DynamicArray<T> {
 		return mData.length;
 	}
 	
+	public void removeAt(int index) {
+		ensureValidIndex(index);
+		System.arraycopy(mData, index + 1, mData, index, (mCount - index + 1));
+		mCount--;
+	}
+	
+	public void remove(T item) {
+		int index = indexOf(item);
+		if (index != INDEX_ITEM_NOT_FOUND) {
+			removeAt(index);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
 		ensureValidIndex(index);
@@ -78,6 +92,12 @@ public class DynamicArray<T> {
 	
 	public void clear() {
 		mCount = 0;
+	}
+	
+	public Object[] toArray() {
+		Object[] rv = new Object[mCount];
+		System.arraycopy(rv, 0, mData, 0, mCount);
+		return rv;
 	}
 	
 	protected void ensureValidIndex(int index) throws IndexOutOfBoundsException {
