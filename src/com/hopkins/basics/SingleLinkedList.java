@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class SingleLinkedList<T> {
 	public int INDEX_ITEM_NOT_FOUND = -1;
 
-	protected Node<T> mHead;
+	protected Node mHead;
 	protected int mCount;
 	
 	public SingleLinkedList() {
@@ -23,8 +23,8 @@ public class SingleLinkedList<T> {
 	}
 	
 	public void insertFirst(T item) {
-		Node<T> oldHead = mHead;
-		mHead = new Node<T>(item, oldHead);
+		Node oldHead = mHead;
+		mHead = new Node(item, oldHead);
 		mCount++;
 	}
 	
@@ -34,11 +34,11 @@ public class SingleLinkedList<T> {
 			insertFirst(item);
 		} else {
 			// Find the last item, and insert after it
-			Node<T> last = mHead;
+			Node last = mHead;
 			while (last.getNext() != null) {
 				last = last.getNext();
 			}
-			last.setNext(new Node<T>(item));
+			last.setNext(new Node(item));
 			mCount++;
 		}
 	}
@@ -55,7 +55,7 @@ public class SingleLinkedList<T> {
 	
 	public int indexOf(T item) {
 		int i = 0;
-		for (Node<T> cur = mHead; cur != null; cur = cur.getNext(), i++) {
+		for (Node cur = mHead; cur != null; cur = cur.getNext(), i++) {
 			if ((item == null) && (cur.getItem() == null)) {
 				return i;
 			} else if (item.equals(cur.getItem())) {
@@ -75,9 +75,9 @@ public class SingleLinkedList<T> {
 	}
 	
 	
-	protected class Node<T> {
+	protected class Node {
 		protected T mItem;
-		protected Node<T> mNext;
+		protected Node mNext;
 		
 		public Node() {
 			init(null, null);
@@ -85,11 +85,11 @@ public class SingleLinkedList<T> {
 		public Node(T item) {
 			init(item, null);
 		}
-		public Node(T item, Node<T> next) {
+		public Node(T item, Node next) {
 			init(item, next);
 		}
 		
-		protected final void init(T item, Node<T> next) {
+		protected final void init(T item, Node next) {
 			mItem = item;
 			mNext = next;
 		}
@@ -100,10 +100,10 @@ public class SingleLinkedList<T> {
 		public void setItem(T value) {
 			mItem = value;
 		}
-		public Node<T> getNext() {
+		public Node getNext() {
 			return mNext;
 		}
-		public void setNext(Node<T> value) {
+		public void setNext(Node value) {
 			mNext = value;
 		}
 	}

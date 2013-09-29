@@ -39,6 +39,12 @@ public class DynamicArray<T> {
 		mCount++;
 	}
 	
+	public void addAll(T... items) {
+		for(T item : items) {
+			add(item);
+		}
+	}
+	
 	public int size() {
 		return mCount;
 	}
@@ -96,7 +102,7 @@ public class DynamicArray<T> {
 	
 	public Object[] toArray() {
 		Object[] rv = new Object[mCount];
-		System.arraycopy(rv, 0, mData, 0, mCount);
+		System.arraycopy(mData, 0, rv, 0, mCount);
 		return rv;
 	}
 	

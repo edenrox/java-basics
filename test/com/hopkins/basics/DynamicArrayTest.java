@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class DynamicArrayTest {
 	
+	
 	@Test
 	public void testConstruction() {
 		
@@ -66,5 +67,61 @@ public class DynamicArrayTest {
 		
 	}
 	
-
+	@Test
+	public void testAddAllSetAndClear() {
+		DynamicArray<String> da = new DynamicArray<String>(5);
+		
+		da.addAll("a", "B", "c", "d", "e");
+		assertEquals(5, da.size());
+		assertEquals("a", da.get(0));
+		
+		da.set(0, "A");
+		assertEquals("A", da.get(0));
+		
+		da.clear();
+		assertEquals(0, da.size());
+	}
+	
+	@Test
+	public void testBadIndexes() {
+		DynamicArray<String> da = new DynamicArray<String>(5);
+		
+		da.addAll("a", "B", "c", "d", "e");
+		
+		testBadIndex(da, -1);
+		testBadIndex(da, 5);
+		testBadIndex(da, 100);
+		
+		assertEquals("B", da.get(1));
+	}
+	
+	protected void testBadIndex(DynamicArray<String> da, int index) {
+		boolean didFail = false;
+		try {
+			da.get(index);
+		} catch (IndexOutOfBoundsException ex) {
+			didFail = true;
+		}
+		
+		assertTrue(didFail);
+	}
+	
+	@Test
+	public void testToArray() {
+		DynamicArray<String> da = new DynamicArray<String>(5);
+		
+		da.addAll("a", "B", "c", "d", "e");
+		
+		Object[] all = da.toArray();
+		assertEquals(5, all.length);
+		assertEquals("B", all[1]);
+		
+		da.set(1, "Slumber");
+		assertEquals("B", all[1]);
+		assertEquals("Slumber", da.get(1));
+		
+		da.add("fiver");
+		assertEquals(6, da.size());
+		assertEquals(5, all.length);
+	}
 }
