@@ -2,7 +2,9 @@ package com.hopkins.basics;
 
 public class HashDictionary<T> {
 	public static final double MAX_LOAD_FACTOR = 0.8;
+	public static final double RESIZE_FACTOR = 2;
 	public static final int DEFAULT_CAPACITY = 8;
+	public static final int POSITION_KEY_NOT_FOUND = -1;
 	protected final KeyValuePair DELETED_KVP = new KeyValuePair(null, null);
 	
 	protected Object[] mTable;
@@ -31,6 +33,7 @@ public class HashDictionary<T> {
 
 		// Allocate new storage
 		mTable = new Object[capacity];
+		mCount = 0;
 		
 		if (oldTable != null) {
 			for(int i = 0; i < oldTable.length; i++) {
@@ -42,10 +45,22 @@ public class HashDictionary<T> {
 		}
 	}
 	
+	protected void resizeIfNeeded(int newCount) {
+		double loadFactor = (double) newCount / mTable.length;
+		if (loadFactor > MAX_LOAD_FACTOR) {
+			resize((int) Math.round(mTable.length * RESIZE_FACTOR));
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void put(String key, T value) {
-		int pos = getPositionForKey(key);
-		if (mTable[pos] == null) {
+		if (key == null) {
+			throw new IllegalArgumentException("Cannot insert null key into HashDictionary");
+		}
+		int pos = getPositionForKey(key, false);
+		if (pos == POSITION_KEY_NOT_FOUND) {
+			resizeIfNeeded(mCount + 1);
+			pos = getPositionForKey(key, true);
 			mTable[pos] = new KeyValuePair(key, value);
 			mCount++;
 		} else {
@@ -56,18 +71,18 @@ public class HashDictionary<T> {
 	
 	@SuppressWarnings("unchecked")
 	public T get(String key) {
-		int pos = getPositionForKey(key);
-		KeyValuePair kvp = (KeyValuePair) mTable[pos];
-		if (kvp != null) {
-			return kvp.getValue();
-		} else {
+		int pos = getPositionForKey(key, false);
+		if (pos == POSITION_KEY_NOT_FOUND) {
 			return null;
+		} else {
+			KeyValuePair kvp = (KeyValuePair) mTable[pos];
+			return kvp.getValue();
 		}
 	}
 	
 	public void remove(String key) {
-		int pos = getPositionForKey(key);
-		if (mTable[pos] == null) {
+		int pos = getPositionForKey(key, false);
+		if (pos == POSITION_KEY_NOT_FOUND) {
 			// this key doesn't exist, so do nothing
 		} else {
 			// mark this key as deleted
@@ -82,14 +97,14 @@ public class HashDictionary<T> {
 			mTable[i] = null;
 		}
 	}
-	
+
 	public boolean containsKey(String key) {
-		int pos = getPositionForKey(key);
-		return (mTable[pos] != null);
+		int pos = getPositionForKey(key, false);
+		return (pos != POSITION_KEY_NOT_FOUND);
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected int getPositionForKey(String key) {
+	protected int getPositionForKey(String key, boolean forInsert) {
 		int hash = key.hashCode();
 		int hashPos = hash % mTable.length;
 		
@@ -97,14 +112,16 @@ public class HashDictionary<T> {
 		for (int i = 0; i < mTable.length; i++) {
 			int probePos = (hashPos + i) % mTable.length;
 			KeyValuePair kvp = (KeyValuePair) mTable[probePos];
-			if ((kvp == null) 
-					|| (kvp == DELETED_KVP)
-					|| (kvp.getKey().equals(key))) {
+			if (forInsert) {
+				if ((kvp == null) || (kvp == DELETED_KVP)) {
+					return probePos;
+				}
+			}
+			if ((kvp != null) && (kvp != DELETED_KVP) && (kvp.getKey().equals(key))) {
 				return probePos;
 			}
 		}
-		
-		return 0;
+		return POSITION_KEY_NOT_FOUND;
 	}
 	
 	

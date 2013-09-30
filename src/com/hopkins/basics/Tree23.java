@@ -1,5 +1,5 @@
 package com.hopkins.basics;
 
-public class Tree23 {
-
+public class Tree23<T> {
+	
 }
