@@ -1,7 +1,11 @@
 package com.hopkins.basics;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /** Similar to an ArrayList **/
-public class DynamicArray<T> {
+public class DynamicArray<T> 
+	implements Iterable<T> {
 	
 	public static final int DEFAULT_CAPACITY = 8;
 	public static final int RESIZE_FACTOR = 2;
@@ -16,6 +20,11 @@ public class DynamicArray<T> {
 	
 	public DynamicArray(int capacity) {
 		resize(capacity);
+	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new DynamicArrayIterator();
 	}
 	
 	protected final void resize(int newCapacity) {
@@ -114,6 +123,36 @@ public class DynamicArray<T> {
 	
 	protected void increaseSize() {
 		resize(RESIZE_FACTOR * mData.length);
+	}
+	
+	public class DynamicArrayIterator implements Iterator<T> {
+		protected int position;
+		
+		public DynamicArrayIterator() {
+			position = 0;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return (position < DynamicArray.this.size());
+		}
+		
+		@Override
+		public T next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			} else {
+				int oldPosition = position;
+				position++;
+				return DynamicArray.this.get(oldPosition);
+			}
+		}
+		
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+		
 	}
 	
 }

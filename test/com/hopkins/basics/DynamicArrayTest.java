@@ -1,6 +1,6 @@
 package com.hopkins.basics;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -123,5 +123,18 @@ public class DynamicArrayTest {
 		da.add("fiver");
 		assertEquals(6, da.size());
 		assertEquals(5, all.length);
+	}
+	
+	@Test
+	public void testIterator() {
+		DynamicArray<String> da = new DynamicArray<String>(5);
+		da.addAll("a", "B", "c", "D", "e", "F");
+		
+		StringBuilder sb = new StringBuilder();
+		for(String item : da) {
+			sb.append(item);
+		}
+		
+		assertEquals("aBcDeF", sb.toString());
 	}
 }
