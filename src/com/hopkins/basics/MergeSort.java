@@ -1,5 +1,6 @@
 package com.hopkins.basics;
 
+/** Merge sort, allocates a lot of temporary space (relies on garbage collector) **/
 public class MergeSort {
 	
 	public static int[] sort(int[] items) {
