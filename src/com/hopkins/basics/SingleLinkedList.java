@@ -1,9 +1,11 @@
 package com.hopkins.basics;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /** A Single linked list **/
-public class SingleLinkedList<T> {
+public class SingleLinkedList<T>
+	implements Iterable<T> {
 	public int INDEX_ITEM_NOT_FOUND = -1;
 
 	protected Node mHead;
@@ -12,6 +14,11 @@ public class SingleLinkedList<T> {
 	public SingleLinkedList() {
 		mHead = null;
 		mCount = 0;
+	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		return new SingleLinkedListIterator();
 	}
 	
 	public void removeFirst() {
@@ -43,7 +50,7 @@ public class SingleLinkedList<T> {
 		}
 	}
 	
-	public T getFirst(T item) {
+	public T getFirst() {
 		return mHead.getItem();
 	}
 	public int size() {
@@ -105,6 +112,35 @@ public class SingleLinkedList<T> {
 		}
 		public void setNext(Node value) {
 			mNext = value;
+		}
+	}
+	
+	public class SingleLinkedListIterator implements Iterator<T> {
+		protected Node cur;
+		
+		public SingleLinkedListIterator() {
+			cur = SingleLinkedList.this.mHead;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return (cur != null);
+		}
+		
+		@Override
+		public T next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			} else {
+				T item = cur.getItem();
+				cur = cur.getNext();
+				return item;
+			}
+		}
+		
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 }
