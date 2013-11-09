@@ -1,6 +1,6 @@
 package com.hopkins.basics;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -94,6 +94,22 @@ public class HashDictionaryTest {
 		assertEquals(4, hd.size());
 		assertTrue(hd.containsKey("name"));
 		assertEquals("The White Wizard", hd.get("name"));
+		
+		hd.remove("name");
+		hd.remove("color");
+		hd.remove("horse");
+		hd.remove("beard");
+		assertEquals(0, hd.size());
+		assertFalse(hd.containsKey("name"));
+		
+		hd.put("name", "Gandalf");
+		hd.put("color", "white");
+		hd.put("horse", "Shadowfax");
+		hd.put("beard", "yes");
+		assertEquals(4, hd.size());
+		assertTrue(hd.containsKey("name"));
+		assertEquals("Gandalf", hd.get("name"));
+		
 		
 		
 		hd.clear();

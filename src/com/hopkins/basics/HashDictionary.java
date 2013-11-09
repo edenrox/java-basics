@@ -1,5 +1,6 @@
 package com.hopkins.basics;
 
+/** A hashtable with String keys and Linear Probing **/
 public class HashDictionary<T> {
 	public static final double MAX_LOAD_FACTOR = 0.8;
 	public static final double RESIZE_FACTOR = 2;
